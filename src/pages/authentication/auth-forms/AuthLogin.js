@@ -49,14 +49,18 @@ const AuthLogin = () => {
         }
        
         const res = await axios.post('http://localhost:8000/api/login/',payload).then((res)=>{
-            console.log(res.data.message);
-            return res.data.message;
+            console.log(res.data);
+            return res.data;
+            // return res.data.message;
         }).catch((e)=>{
             setErr(e.response.data.message)
         })
 
-        if(res === "Login successful."){
-            navigate('/sem-year');
+        if(res.status  == 'student'){
+            navigate(`/sem-year/${res.id}`);
+        }
+        if(res.status  == 'admin'){
+            navigate(`/${res.id}`);
         }
     }
 

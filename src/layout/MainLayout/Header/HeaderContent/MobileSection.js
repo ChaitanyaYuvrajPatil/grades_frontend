@@ -59,42 +59,6 @@ const MobileSection = () => {
                     <MoreOutlined />
                 </IconButton>
             </Box>
-            <Popper
-                placement="bottom-end"
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-                style={{
-                    width: '100%'
-                }}
-                popperOptions={{
-                    modifiers: [
-                        {
-                            name: 'offset',
-                            options: {
-                                offset: [0, 9]
-                            }
-                        }
-                    ]
-                }}
-            >
-                {({ TransitionProps }) => (
-                    <Transitions type="fade" in={open} {...TransitionProps}>
-                        <Paper sx={{ boxShadow: theme.customShadows.z1 }}>
-                            <ClickAwayListener onClickAway={handleClose}>
-                                <AppBar color="inherit">
-                                    <Toolbar>
-                                        <Search />
-                                        <Profile />
-                                    </Toolbar>
-                                </AppBar>
-                            </ClickAwayListener>
-                        </Paper>
-                    </Transitions>
-                )}
-            </Popper>
         </>
     );
 };

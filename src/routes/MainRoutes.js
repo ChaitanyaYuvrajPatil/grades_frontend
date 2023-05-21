@@ -24,7 +24,7 @@ const MainRoutes = {
     element: <MainLayout />,
     children: [
         {
-            path: '/',
+            path: '/:adminId',
             element: <DashboardDefault />
         },
         {
@@ -32,7 +32,7 @@ const MainRoutes = {
             element: <Color />
         },
         {
-            path: 'dashboard',
+            path: 'dashboard/:adminId',
             children: [
                 {
                     path: 'default',
@@ -49,7 +49,7 @@ const MainRoutes = {
             element: <Shadow />
         },
         {
-            path: 'typography',
+            path: 'student/:student_ID',
             element: <Typography />
         },
         {

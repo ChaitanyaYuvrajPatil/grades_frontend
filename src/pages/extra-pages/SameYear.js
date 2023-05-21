@@ -1,9 +1,10 @@
 import  { useEffect, useState } from 'react';
 import { Container, Typography, FormControl, Select, MenuItem, Button } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 
 const SameYear = () => {
+  const {user_id} = useParams();
   const [departmentState, setDepartmentState] = useState('');
   const [semesterState, setSemesterState] = useState('');
   const [department,setDepartment] = useState({});
@@ -11,6 +12,7 @@ const SameYear = () => {
   const navigate = useNavigate();
 
   // let department = {}
+
 
   const departmentChange = (event) => {
     console.log(event);
@@ -22,7 +24,7 @@ const SameYear = () => {
   };
 
   const handleSubmit = async() => {
-      navigate(`/subject-form/${departmentState}/${semesterState}`)
+      navigate(`/subject-form/${user_id}/${departmentState}/${semesterState}`)
   };
 
   const get_sem_department = async() =>{

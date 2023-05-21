@@ -1,14 +1,13 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { Box, useTheme,Typography,MenuItem, Button } from "@mui/material";
 import { DataGrid} from "@mui/x-data-grid";
-
-import Snackbar from '@mui/material/Snackbar';
-
-
+import axios from 'axios'
+import { useNavigate,useParams } from 'react-router-dom';
 
 const DashboardDefault = () => {
-
-    let orders = {}
+    const {adminId} = useParams();
+    const navigate = useNavigate();
+    const [students, setStudents] = useState({});
     const [open, setOpen] = useState(false);
     const handleButtonClick = () => {
       setOpen(true);
@@ -22,33 +21,12 @@ const DashboardDefault = () => {
     };
   
     const columns = [
-        {
-            field: "id",
-            headerName: "Order No",
-            flex: 1,
-            renderCell: ({ row: { id } })=>{
-              return (
-                    <MenuItem onClick={()=>{show_order(id)}}>{id}</MenuItem>
-              );
-            }
-          },
       // { field: "id", headerName: "Order No",flex:1},
-      { field: "fullname", headerName: "User Name",flex:1},
-      { field: "contact_no", headerName: "User Mobile No",flex:1},
-      { field: "email", headerName: "User Email",flex:1},
-      { field: "Airport__code", headerName: "Airport Code",flex:1},
-      // { field: "city", headerName: "Airport City",flex:1},
-      { field: "final_price", headerName: "Order Value",flex:1},
-      { field: "discount", headerName: "Discount",flex:1},
-      { field: "Status Messages__slug", headerName: "Order Status",flex:1},
-      { field: "created_at", headerName: "Order Date and Time",flex:1},
-      { field: "delivery_time", headerName: "Delivery Time",flex:1},
-      // { field: "partner", headerName: "Partner code",flex:1},
-      { field: "store_order_id", headerName: "Store Order Id",flex:1},
-      { field: "Retailers__store_name", headerName: "Retailers storename",flex:1},
-      { field: "Airport__name", headerName: "Airport Name",flex:1},
+      { field: "id", headerName: "Id",flex:1},
+      { field: "name", headerName: "Name",flex:1},
+      { field: "reg_no", headerName: "Reg No",flex:1},
       {
-        headerName: "Edit",
+        headerName: "Actions",
         flex: 1,
         renderCell: ({ row: { id } })=>{
           return (
@@ -58,20 +36,50 @@ const DashboardDefault = () => {
                     justifyContent="center  "
                     gap="10px"
             >
-              <Button variant="contained" size="small" startIcon={<EditIcon />} onClick={()=>{edit_order(id)}}>Edit</Button>
+              <Button variant="contained" size="small"  onClick={()=>{view_student(id)}}>View</Button>
+              <Button variant="contained" size="small"  style={{ backgroundColor: 'green' }} onClick={()=>{approve(id,true)}}>Aprove</Button>
+              <Button variant="contained"  size="small"  style={{ backgroundColor: 'red' }} onClick={()=>{Reject(id,false)}}>Reject</Button>
             </Box>
-           
           );
         }
       },
     ];
 
+
+    const view_student = (id) =>{
+      navigate(`/student/${id}`)
+    }
+
+    const approve = (id,flag) =>{
+       const res = axios.get(`http://localhost:8000/api/pdf/${id}/true`).then((res)=>{
+        alert("Approval Mail sended Successfully")
+        console.log(res);
+       })
+    }
+
+    const Reject = (id,flag) =>{
+      const res = axios.get(`http://localhost:8000/api/pdf/${id}/false`)
+      .then((res)=>{
+        alert("Rejection Mail sended Successfully")
+        console.log(res);
+       })
+       console.log(res);
+
+    }
+    const getStudentData = async() =>{
+      const data  = await axios.get(`http://localhost:8000/api/students/1/`)
+      console.log(data);
+      setStudents(data.data.students);
+    }
+    useEffect(()=>{
+      getStudentData();
+    },[])
     return (
         <Box m="20px">
           <Box
             m="40px 0 0 0"
             height="75vh"
-            width="100%"
+            width="95%"
             overflow="auto"
             sx={{
               "& .MuiDataGrid-root": {
@@ -81,25 +89,25 @@ const DashboardDefault = () => {
                 borderBottom: "none",
               },
               "& .name-column--cell": {
-                color: `blue`,
+                color: `#DCDCDC`,
               },
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: `blue`,
+                backgroundColor: `#D3D3D3`,
                 borderBottom: "none",
               },
               "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: `blue`,
+                backgroundColor: `#DCDCDC`,
               },
               "& .MuiDataGrid-footerContainer": {
                 borderTop: "none",
-                backgroundColor: `blue`,
+                backgroundColor: `#D3D3D3`,
               },
               "& .MuiCheckbox-root": {
-                color: `blue`,
+                color: `#DCDCDC`,
               },
             }}
           >
-            <DataGrid rows={orders} columns={columns} />
+            <DataGrid rows={students} columns={columns} />
           </Box>
           
         </Box>

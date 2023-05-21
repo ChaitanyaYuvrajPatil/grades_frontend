@@ -26,11 +26,11 @@ const LoginRoutes = {
             element: <AuthRegister />
         },
         {
-            path: 'sem-year',
+            path: 'sem-year/:user_id',
             element: <SameYear/>
         },
         {
-            path: 'subject-form/:depId/:semId',
+            path: 'subject-form/:user_id/:depId/:semId',
             element: <SubjectForm/>
         }
     ]

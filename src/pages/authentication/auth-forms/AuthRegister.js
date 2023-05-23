@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // material-ui
@@ -32,6 +32,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { Alert } from '../../../../node_modules/@mui/lab/index';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -40,7 +41,9 @@ const AuthRegister = () => {
     const [courseName, setCourseName] = useState('');
     const [departmentName, setDepartmentName] = useState('');
     const [department,setDepartment] = useState({});
-  
+    const [err, setErr] = useState({});
+    const navigate = useNavigate();
+
     const courseChange = (event) => {
       setCourseName(event.target.value);
     };
@@ -100,10 +103,14 @@ const AuthRegister = () => {
 
         await axios.post('http://localhost:8000/api/signup/',payload)
         .then((data)=> {
+            // console.log("error")
             console.log(data);
+            alert("Your data submitted successfully");
+            navigate('/login');
         })
         .catch((e)=>{
-            console.log(e);
+            console.log(e.response.data);
+            setErr(e.response.data)
         })
 
 
@@ -131,7 +138,7 @@ const AuthRegister = () => {
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required'),
                     name: Yup.string().max(255).required('required'),
-                    reg_no: Yup.string().max(255).required('required'),
+                    // reg_no: Yup.string().max(255).required('required'),
                     // email : Yup.string().max(255).required('required'),
                     // department : Yup.string().max(255).required('required'),
                     mobile : Yup.string().max(255).required('required'),
@@ -179,8 +186,8 @@ const AuthRegister = () => {
                                 <MenuItem value="" disabled>
                                   Course
                                 </MenuItem>
-                                <MenuItem value="option1_1">BTech</MenuItem>
-                                <MenuItem value="option1_2">MTech</MenuItem>
+                                <MenuItem value="BTech">BTech</MenuItem>
+                                <MenuItem value="MTech">MTech</MenuItem>
                               </Select>
                                 </Stack>
                             </Grid>
@@ -191,8 +198,8 @@ const AuthRegister = () => {
                                 <MenuItem value="" disabled>
                                   Status
                                 </MenuItem>
-                                <MenuItem value="option1_1">Admin</MenuItem>
-                                <MenuItem value="option1_2">Student</MenuItem>
+                                <MenuItem value="admin">Admin</MenuItem>
+                                <MenuItem value="student">Student</MenuItem>
                               </Select>
                                 </Stack>
                             </Grid>
@@ -398,7 +405,13 @@ const AuthRegister = () => {
                                     </Button>
                                 </AnimateButton>
                             </Grid>
-                           
+                            {err && 
+                                    Object.entries(err).map(([key2, value2]) => {
+                                        return (
+                                            <Alert severity="error">{value2}</Alert>
+                                        );
+                                    })
+                            }
                         </Grid>
                     </form>
                 )}

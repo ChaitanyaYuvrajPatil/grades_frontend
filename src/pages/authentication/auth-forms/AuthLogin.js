@@ -44,8 +44,8 @@ const AuthLogin = () => {
 
     const submit = async(event) => {
         const payload = {
-            username : event.email,
-            password : event.password
+            "username": event.email,
+            "password": event.password
         }
        
         const res = await axios.post('http://localhost:8000/api/login/',payload).then((res)=>{
@@ -53,9 +53,11 @@ const AuthLogin = () => {
             return res.data;
             // return res.data.message;
         }).catch((e)=>{
+            console.log(e);
             setErr(e.response.data.message)
         })
 
+        console.log(res);
         if(res.status  == 'student'){
             navigate(`/sem-year/${res.id}`);
         }

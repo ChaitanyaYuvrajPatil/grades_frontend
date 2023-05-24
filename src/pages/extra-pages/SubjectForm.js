@@ -73,7 +73,7 @@ const SubjectForm = () => {
   }
 
   const subjectFunction = async() => {
-     const st = await axios.get(`http://localhost:8000/api/department/1/semester/1/subjects/`)
+     const st = await axios.get(`http://localhost:8000/api/department/${depId}/semester/${semId}/subjects/`)
     {Object.entries(st.data).map(([key,value])=>(
       setSubjectScores((prevScores) => ({
         ...prevScores,
